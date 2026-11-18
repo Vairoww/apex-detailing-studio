@@ -1,10 +1,20 @@
-import { createContext, useContext, useEffect, useState, type FormEvent } from "react";
+import {
+  createContext,
+  useContext,
+  useEffect,
+  useRef,
+  useState,
+  type FormEvent,
+  type MouseEvent,
+  type ReactNode,
+} from "react";
 import { BrowserRouter, Link, NavLink, Route, Routes, useLocation, useNavigate, useSearchParams } from "react-router-dom";
 import {
   ArrowRight,
   Award,
   Check,
   CheckCircle2,
+  ChevronDown,
   Clock,
   Layers,
   Mail,
@@ -101,6 +111,32 @@ const COPY = {
             "Wrapped edges with zero visible seams",
             "5-year written warranty & annual inspection",
           ],
+        },
+      ],
+    },
+    faq: {
+      eyebrow: "FAQ",
+      title: "Frequently Asked Questions",
+      items: [
+        {
+          q: "How long does a ceramic coating or PPF installation take?",
+          a: "Essential Gloss takes 1 full day. Ceramic Pro Shield requires 2–3 days to allow proper multi-stage correction and 12-hour infrared curing. Ultimate PPF + Ceramic packages take 3–4 business days.",
+        },
+        {
+          q: "Should I protect a brand-new car straight from the dealership?",
+          a: "Yes — factory clear coat is completely unsealed and often arrives with minor transit swirl marks. Applying PPF and 9H ceramic immediately locks in showroom condition before stone chips occur.",
+        },
+        {
+          q: "How does self-healing PPF work against stone chips?",
+          a: "Our aliphatic polyurethane film absorbs high-velocity gravel impacts without transferring damage to your factory paint. Minor surface scuffs vanish automatically when exposed to sunlight or warm water.",
+        },
+        {
+          q: "Can I use automatic car washes after ceramic coating?",
+          a: "We strongly advise against brush car washes as stiff bristles mar any surface. Touchless wash bays or pH-neutral hand washes keep the hydrophobic coating performing at peak gloss for 5+ years.",
+        },
+        {
+          q: "Is my vehicle insured while staying at your studio?",
+          a: "Yes. Both our Vienna and Munich studios are monitored 24/7, climate-regulated, and covered by comprehensive garage-keeper liability insurance up to €500,000 per vehicle.",
         },
       ],
     },
@@ -248,6 +284,32 @@ const COPY = {
         },
       ],
     },
+    faq: {
+      eyebrow: "FAQ",
+      title: "Häufig gestellte Fragen",
+      items: [
+        {
+          q: "Wie lange dauert eine Keramikversiegelung oder PPF-Folierung?",
+          a: "Essential Gloss dauert 1 Werktag. Ceramic Pro Shield benötigt 2–3 Tage für die mehrstufige Politur und IR-Aushärtung. Ultimate PPF + Ceramic dauert 3–4 Werktage.",
+        },
+        {
+          q: "Lohnt sich Lackschutz direkt bei einem Neuwagen?",
+          a: "Unbedingt — Werkslack ist ungeschützt und weist oft bereits leichte Transportschlieren auf. PPF und 9H-Keramik konservieren den Neuwagenzustand dauerhaft vor Steinschlägen.",
+        },
+        {
+          q: "Wie funktioniert die Selbstheilung bei PPF-Schutzfolien?",
+          a: "Unsere Polyurethanfolie absorbiert Steinschläge, ohne den Originallack zu beschädigen. Feine Oberflächenkratzer verschwinden durch Sonnenwärme oder warmes Wasser von selbst.",
+        },
+        {
+          q: "Darf ich nach der Versiegelung in die Waschstraße?",
+          a: "Von Bürstenwaschanlagen raten wir ab, da harte Borsten jeden Lack zerkratzen. Kontaktlose Waschboxen oder pH-neutrale Handwäsche erhalten den Glanz über 5+ Jahre.",
+        },
+        {
+          q: "Ist mein Fahrzeug während des Aufenthalts versichert?",
+          a: "Ja. Unsere klimatisierten Studios in Wien und München sind 24/7 überwacht und verfügen über eine Betriebshaftpflichtversicherung bis 500.000 € pro Fahrzeug.",
+        },
+      ],
+    },
     ctaBanner: {
       title: "Bereit für perfekten Lackschutz?",
       sub: "Nennen Sie uns Ihr Fahrzeugmodell — Sie erhalten innerhalb von 24 Stunden ein maßgeschneidertes Angebot.",
@@ -392,6 +454,32 @@ const COPY = {
         },
       ],
     },
+    faq: {
+      eyebrow: "FAQ",
+      title: "Často kladené otázky",
+      items: [
+        {
+          q: "Ako dlho trvá aplikácia keramickej ochrany alebo PPF fólie?",
+          a: "Balík Essential Gloss trvá 1 deň. Ceramic Pro Shield vyžaduje 2–3 dni kvôli viackrokovému lešteniu a IR vytvrdzovaniu. Ultimate PPF + Ceramic trvá 3–4 pracovné dni.",
+        },
+        {
+          q: "Oplatí sa chrániť úplne nové auto priamo zo salónu?",
+          a: "Áno — výrobný lak nie je chránený a často má jemné mikroškrabance z prepravy. Okamžitá aplikácia PPF a 9H keramiky uchová stav nového vozidla skôr, než vzniknú odreniny od kamienkov.",
+        },
+        {
+          q: "Ako funguje samoopravná schopnosť PPF fólie?",
+          a: "Polyuretánová fólia pohltí nárazy kamienkov bez poškodenia pôvodného laku. Jemné škrabance na povrchu fólie sa vplyvom slnečného tepla alebo teplej vody samy zatiahnu.",
+        },
+        {
+          q: "Môžem po keramickej ochrane chodiť do kefovej autoumyvárne?",
+          a: "Kefovým umyvárňam sa určite vyhnite, pretože tvrdé kefy poškriabu každý povrch. Bezkontaktné umývanie alebo pH-neutrálne ručné umývanie udrží perfektný lesk viac ako 5 rokov.",
+        },
+        {
+          q: "Je moje vozidlo počas pobytu v štúdiu poistené?",
+          a: "Áno. Naše klimatizované priestory vo Viedni aj Mníchove sú nepretržite monitorované a poistené na škody až do výšky 500 000 € na vozidlo.",
+        },
+      ],
+    },
     ctaBanner: {
       title: "Chcete ochrániť svoje vozidlo?",
       sub: "Napíšte nám model auta a vybraný balík — presnú ponuku vám pošleme do 24 hodín.",
@@ -459,6 +547,97 @@ const COPY = {
 const LangContext = createContext<{ lang: Lang; setLang: (l: Lang) => void }>({ lang: "en", setLang: () => {} });
 const useLang = () => useContext(LangContext);
 
+function CursorAmbientGlow() {
+  const glowRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    const onMove = (e: globalThis.MouseEvent) => {
+      if (!glowRef.current) return;
+      glowRef.current.style.background = `radial-gradient(650px circle at ${e.clientX}px ${e.clientY}px, rgba(249, 115, 22, 0.085), transparent 65%)`;
+    };
+    window.addEventListener("mousemove", onMove, { passive: true });
+    return () => window.removeEventListener("mousemove", onMove);
+  }, []);
+
+  return <div ref={glowRef} className="pointer-events-none fixed inset-0 z-30 hidden transition-opacity duration-300 md:block" />;
+}
+
+function SpotlightCard({
+  children,
+  className = "",
+  highlighted = false,
+}: {
+  children: ReactNode;
+  className?: string;
+  highlighted?: boolean;
+}) {
+  const cardRef = useRef<HTMLDivElement>(null);
+  const [pos, setPos] = useState({ x: 0, y: 0 });
+  const [hovering, setHovering] = useState(false);
+
+  const handleMouseMove = (e: MouseEvent<HTMLDivElement>) => {
+    if (!cardRef.current) return;
+    const rect = cardRef.current.getBoundingClientRect();
+    setPos({ x: e.clientX - rect.left, y: e.clientY - rect.top });
+  };
+
+  return (
+    <div
+      ref={cardRef}
+      onMouseMove={handleMouseMove}
+      onMouseEnter={() => setHovering(true)}
+      onMouseLeave={() => setHovering(false)}
+      className={`group relative overflow-hidden rounded-2xl border bg-[#141417] transition-all duration-300 ${
+        highlighted
+          ? "border-[#F97316] shadow-[0_0_35px_rgba(249,115,22,0.14)]"
+          : "border-[#27272A] hover:border-[#F97316]/50"
+      } ${className}`}
+    >
+      <div
+        className="pointer-events-none absolute -inset-px rounded-2xl transition-opacity duration-300"
+        style={{
+          opacity: hovering ? 1 : 0,
+          background: `radial-gradient(420px circle at ${pos.x}px ${pos.y}px, rgba(249, 115, 22, 0.16), transparent 65%)`,
+        }}
+      />
+      <div className="relative z-10 flex h-full flex-col">{children}</div>
+    </div>
+  );
+}
+
+function Reveal({ children, delay = 0, className = "" }: { children: ReactNode; delay?: number; className?: string }) {
+  const ref = useRef<HTMLDivElement>(null);
+  const [visible, setVisible] = useState(false);
+
+  useEffect(() => {
+    const el = ref.current;
+    if (!el) return;
+    const obs = new IntersectionObserver(
+      ([entry]) => {
+        if (entry?.isIntersecting) {
+          setVisible(true);
+          obs.disconnect();
+        }
+      },
+      { threshold: 0.12, rootMargin: "0px 0px -30px 0px" }
+    );
+    obs.observe(el);
+    return () => obs.disconnect();
+  }, []);
+
+  return (
+    <div
+      ref={ref}
+      style={{ transitionDelay: `${delay}ms` }}
+      className={`transition-all duration-700 ease-out will-change-transform ${
+        visible ? "translate-y-0 opacity-100" : "translate-y-8 opacity-0"
+      } ${className}`}
+    >
+      {children}
+    </div>
+  );
+}
+
 function usePageMeta(title: string, description: string) {
   useEffect(() => {
     document.title = title;
@@ -509,7 +688,9 @@ function Layout({ children }: { children: React.ReactNode }) {
   );
 
   return (
-    <div lang={lang} className="flex min-h-screen flex-col bg-[#09090B] text-[#FAFAFA]">
+    <div lang={lang} className="relative flex min-h-screen flex-col bg-[#09090B] text-[#FAFAFA]">
+      <CursorAmbientGlow />
+
       <header className="sticky top-0 z-50 border-b border-[#27272A] bg-[#09090B]/85 backdrop-blur-xl">
         <div className="mx-auto flex h-16 max-w-6xl items-center justify-between px-5">
           <Link to="/" className="flex items-center gap-2.5 font-display text-lg font-extrabold tracking-wider">
@@ -540,7 +721,7 @@ function Layout({ children }: { children: React.ReactNode }) {
             <LangToggle />
             <Link
               to="/contact"
-              className="inline-flex items-center gap-1.5 rounded-full bg-[#F97316] px-4 py-2 text-xs font-bold text-white transition-transform hover:scale-105"
+              className="inline-flex items-center gap-1.5 rounded-full bg-[#F97316] px-4 py-2 text-xs font-bold text-white shadow-[0_0_20px_rgba(249,115,22,0.3)] transition-transform hover:scale-105"
             >
               {t.nav.cta} <ArrowRight className="size-3.5" />
             </Link>
@@ -603,6 +784,7 @@ function HomePage() {
   const { lang } = useLang();
   const t = COPY[lang];
   usePageMeta(t.seo.home[0], t.seo.home[1]);
+  const [openFaq, setOpenFaq] = useState<number | null>(0);
   const icons = [Sparkles, Shield, Layers];
 
   return (
@@ -610,114 +792,170 @@ function HomePage() {
       <section className="relative overflow-hidden border-b border-[#27272A]">
         <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_top,rgba(249,115,22,0.16),transparent_60%)]" />
         <div className="relative mx-auto max-w-6xl px-5 pb-20 pt-24 text-center md:pt-32">
-          <span className="inline-flex items-center gap-2 rounded-full border border-[#27272A] bg-[#141417] px-4 py-1.5 text-xs font-medium text-zinc-300">
-            <span className="size-1.5 rounded-full bg-[#F97316]" /> {t.hero.badge}
-          </span>
-          <h1 className="mx-auto mt-7 max-w-4xl text-4xl font-extrabold leading-[1.06] sm:text-6xl md:text-7xl">{t.hero.title}</h1>
-          <p className="mx-auto mt-6 max-w-2xl text-lg text-zinc-400">{t.hero.sub}</p>
-          <div className="mt-10 flex flex-col justify-center gap-3 sm:flex-row">
-            <Link
-              to="/contact"
-              className="inline-flex h-12 items-center justify-center gap-2 rounded-full bg-[#F97316] px-7 font-semibold text-white shadow-[0_0_30px_rgba(249,115,22,0.3)] transition-transform hover:scale-105"
-            >
-              {t.hero.cta1} <ArrowRight className="size-4" />
-            </Link>
-            <Link
-              to="/services"
-              className="inline-flex h-12 items-center justify-center rounded-full border border-[#27272A] bg-[#141417] px-7 font-semibold text-white transition-colors hover:border-zinc-600"
-            >
-              {t.hero.cta2}
-            </Link>
-          </div>
-          <div className="mx-auto mt-16 flex max-w-3xl flex-wrap justify-center gap-x-8 gap-y-3 border-t border-[#27272A] pt-8 text-sm text-zinc-400">
-            {t.hero.trust.map((item) => (
-              <span key={item} className="flex items-center gap-2">
-                <Check className="size-4 text-[#F97316]" /> {item}
-              </span>
-            ))}
-          </div>
+          <Reveal>
+            <span className="inline-flex items-center gap-2 rounded-full border border-[#27272A] bg-[#141417] px-4 py-1.5 text-xs font-medium text-zinc-300">
+              <span className="size-1.5 rounded-full bg-[#F97316]" /> {t.hero.badge}
+            </span>
+            <h1 className="mx-auto mt-7 max-w-4xl text-4xl font-extrabold leading-[1.06] sm:text-6xl md:text-7xl">{t.hero.title}</h1>
+            <p className="mx-auto mt-6 max-w-2xl text-lg text-zinc-400">{t.hero.sub}</p>
+            <div className="mt-10 flex flex-col justify-center gap-3 sm:flex-row">
+              <Link
+                to="/contact"
+                className="inline-flex h-12 items-center justify-center gap-2 rounded-full bg-[#F97316] px-7 font-semibold text-white shadow-[0_0_30px_rgba(249,115,22,0.35)] transition-transform hover:scale-105"
+              >
+                {t.hero.cta1} <ArrowRight className="size-4" />
+              </Link>
+              <Link
+                to="/services"
+                className="inline-flex h-12 items-center justify-center rounded-full border border-[#27272A] bg-[#141417] px-7 font-semibold text-white transition-colors hover:border-[#F97316]/60"
+              >
+                {t.hero.cta2}
+              </Link>
+            </div>
+            <div className="mx-auto mt-16 flex max-w-3xl flex-wrap justify-center gap-x-8 gap-y-3 border-t border-[#27272A] pt-8 text-sm text-zinc-400">
+              {t.hero.trust.map((item) => (
+                <span key={item} className="flex items-center gap-2">
+                  <Check className="size-4 text-[#F97316]" /> {item}
+                </span>
+              ))}
+            </div>
+          </Reveal>
         </div>
       </section>
 
       <section className="border-b border-[#27272A] py-24">
         <div className="mx-auto max-w-6xl px-5">
-          <span className="text-xs font-bold uppercase tracking-[0.2em] text-[#F97316]">{t.pillars.eyebrow}</span>
-          <h2 className="mt-3 text-3xl font-extrabold sm:text-5xl">{t.pillars.title}</h2>
+          <Reveal>
+            <span className="text-xs font-bold uppercase tracking-[0.2em] text-[#F97316]">{t.pillars.eyebrow}</span>
+            <h2 className="mt-3 text-3xl font-extrabold sm:text-5xl">{t.pillars.title}</h2>
+          </Reveal>
           <div className="mt-12 grid gap-6 md:grid-cols-3">
             {t.pillars.items.map((item, idx) => {
               const Icon = icons[idx]!;
               return (
-                <div key={item.t} className="rounded-2xl border border-[#27272A] bg-[#141417] p-8">
-                  <div className="flex size-12 items-center justify-center rounded-xl bg-[#F97316]/10 text-[#F97316]">
-                    <Icon className="size-6" />
-                  </div>
-                  <h3 className="mt-6 text-xl font-bold">{item.t}</h3>
-                  <p className="mt-3 text-sm leading-relaxed text-zinc-400">{item.d}</p>
-                </div>
+                <Reveal key={item.t} delay={idx * 100}>
+                  <SpotlightCard className="h-full p-8">
+                    <div className="flex size-12 items-center justify-center rounded-xl bg-[#F97316]/10 text-[#F97316] transition-transform duration-300 group-hover:scale-110">
+                      <Icon className="size-6" />
+                    </div>
+                    <h3 className="mt-6 text-xl font-bold">{item.t}</h3>
+                    <p className="mt-3 text-sm leading-relaxed text-zinc-400">{item.d}</p>
+                  </SpotlightCard>
+                </Reveal>
               );
             })}
           </div>
         </div>
       </section>
 
-      <section className="py-24">
+      <section className="border-b border-[#27272A] py-24">
         <div className="mx-auto max-w-6xl px-5">
-          <div className="flex flex-col justify-between gap-4 md:flex-row md:items-end">
-            <div>
-              <span className="text-xs font-bold uppercase tracking-[0.2em] text-[#F97316]">{t.packages.eyebrow}</span>
-              <h2 className="mt-3 text-3xl font-extrabold sm:text-5xl">{t.packages.title}</h2>
-            </div>
-            <Link to="/services" className="inline-flex items-center gap-2 text-sm font-semibold text-[#F97316] hover:underline">
-              {t.packages.viewAllBtn} <ArrowRight className="size-4" />
-            </Link>
-          </div>
-          <div className="mt-12 grid gap-6 md:grid-cols-3">
-            {t.packages.tiers.map((tier) => (
-              <div
-                key={tier.id}
-                className={`relative flex flex-col rounded-2xl border bg-[#141417] p-8 ${
-                  tier.popular ? "border-[#F97316] shadow-[0_0_35px_rgba(249,115,22,0.12)]" : "border-[#27272A]"
-                }`}
-              >
-                {tier.popular && (
-                  <span className="absolute -top-3 left-1/2 -translate-x-1/2 rounded-full bg-[#F97316] px-3 py-1 text-xs font-bold text-white">
-                    {t.packages.popular}
-                  </span>
-                )}
-                <h3 className="text-lg font-bold">{tier.name}</h3>
-                <div className="mt-4 flex items-baseline gap-2">
-                  <span className="font-display text-4xl font-extrabold">{tier.price}</span>
-                  <span className="text-xs text-zinc-400">· {tier.duration}</span>
-                </div>
-                <ul className="mt-6 flex-1 space-y-2.5 text-sm text-zinc-300">
-                  {tier.features.slice(0, 3).map((f) => (
-                    <li key={f} className="flex gap-2.5">
-                      <Check className="mt-0.5 size-4 shrink-0 text-[#F97316]" /> {f}
-                    </li>
-                  ))}
-                </ul>
-                <Link
-                  to={`/contact?pkg=${encodeURIComponent(`${tier.name} (${tier.price})`)}`}
-                  className={`mt-8 inline-flex h-11 items-center justify-center rounded-full text-sm font-semibold transition-colors ${
-                    tier.popular ? "bg-[#F97316] text-white" : "border border-[#27272A] bg-[#09090B] text-white hover:border-zinc-600"
-                  }`}
-                >
-                  {t.packages.selectBtn}
-                </Link>
+          <Reveal>
+            <div className="flex flex-col justify-between gap-4 md:flex-row md:items-end">
+              <div>
+                <span className="text-xs font-bold uppercase tracking-[0.2em] text-[#F97316]">{t.packages.eyebrow}</span>
+                <h2 className="mt-3 text-3xl font-extrabold sm:text-5xl">{t.packages.title}</h2>
               </div>
+              <Link to="/services" className="inline-flex items-center gap-2 text-sm font-semibold text-[#F97316] hover:underline">
+                {t.packages.viewAllBtn} <ArrowRight className="size-4" />
+              </Link>
+            </div>
+          </Reveal>
+
+          <div className="mt-12 grid gap-6 md:grid-cols-3">
+            {t.packages.tiers.map((tier, idx) => (
+              <Reveal key={tier.id} delay={idx * 100}>
+                <div className="relative h-full">
+                  {tier.popular && (
+                    <span className="absolute -top-3 left-1/2 z-20 -translate-x-1/2 rounded-full bg-[#F97316] px-3 py-1 text-xs font-bold text-white shadow-[0_0_20px_rgba(249,115,22,0.5)]">
+                      {t.packages.popular}
+                    </span>
+                  )}
+                  <SpotlightCard highlighted={tier.popular} className="h-full p-8">
+                    <h3 className="text-lg font-bold">{tier.name}</h3>
+                    <div className="mt-4 flex items-baseline gap-2">
+                      <span className="font-display text-4xl font-extrabold">{tier.price}</span>
+                      <span className="text-xs text-zinc-400">· {tier.duration}</span>
+                    </div>
+                    <ul className="mt-6 flex-1 space-y-2.5 text-sm text-zinc-300">
+                      {tier.features.slice(0, 3).map((f) => (
+                        <li key={f} className="flex gap-2.5">
+                          <Check className="mt-0.5 size-4 shrink-0 text-[#F97316]" /> {f}
+                        </li>
+                      ))}
+                    </ul>
+                    <Link
+                      to={`/contact?pkg=${encodeURIComponent(`${tier.name} (${tier.price})`)}`}
+                      className={`mt-8 inline-flex h-11 items-center justify-center rounded-full text-sm font-semibold transition-all ${
+                        tier.popular
+                          ? "bg-[#F97316] text-white shadow-[0_0_20px_rgba(249,115,22,0.3)] hover:brightness-110"
+                          : "border border-[#27272A] bg-[#09090B] text-white hover:border-[#F97316]/60"
+                      }`}
+                    >
+                      {t.packages.selectBtn}
+                    </Link>
+                  </SpotlightCard>
+                </div>
+              </Reveal>
             ))}
           </div>
+        </div>
+      </section>
 
-          <div className="mt-20 rounded-3xl border border-[#27272A] bg-gradient-to-r from-[#141417] to-[#1c1410] p-10 text-center md:p-14">
-            <h3 className="text-2xl font-extrabold sm:text-4xl">{t.ctaBanner.title}</h3>
-            <p className="mx-auto mt-3 max-w-xl text-zinc-400">{t.ctaBanner.sub}</p>
-            <Link
-              to="/contact"
-              className="mt-8 inline-flex h-12 items-center gap-2 rounded-full bg-[#F97316] px-8 font-semibold text-white"
-            >
-              {t.ctaBanner.btn} <ArrowRight className="size-4" />
-            </Link>
+      <section className="py-24">
+        <div className="mx-auto max-w-4xl px-5">
+          <Reveal>
+            <span className="text-xs font-bold uppercase tracking-[0.2em] text-[#F97316]">{t.faq.eyebrow}</span>
+            <h2 className="mt-3 text-3xl font-extrabold sm:text-5xl">{t.faq.title}</h2>
+          </Reveal>
+
+          <div className="mt-12 space-y-3">
+            {t.faq.items.map((item, idx) => {
+              const isOpen = openFaq === idx;
+              return (
+                <Reveal key={item.q} delay={idx * 70}>
+                  <SpotlightCard highlighted={isOpen}>
+                    <button
+                      type="button"
+                      onClick={() => setOpenFaq(isOpen ? null : idx)}
+                      className="flex w-full items-center justify-between gap-4 px-6 py-5 text-left"
+                    >
+                      <span className="text-base font-semibold sm:text-lg">{item.q}</span>
+                      <ChevronDown
+                        className={`size-5 shrink-0 text-[#F97316] transition-transform duration-300 ${isOpen ? "rotate-180" : ""}`}
+                      />
+                    </button>
+                    <div
+                      className={`grid transition-all duration-300 ease-out ${
+                        isOpen ? "grid-rows-[1fr] opacity-100" : "grid-rows-[0fr] opacity-0"
+                      }`}
+                    >
+                      <div className="overflow-hidden">
+                        <p className="border-t border-[#27272A] px-6 pb-5 pt-3 text-sm leading-relaxed text-zinc-400 sm:text-base">
+                          {item.a}
+                        </p>
+                      </div>
+                    </div>
+                  </SpotlightCard>
+                </Reveal>
+              );
+            })}
           </div>
+
+          <Reveal delay={150}>
+            <SpotlightCard className="mt-20 bg-gradient-to-r from-[#141417] to-[#1c1410] p-10 text-center md:p-14">
+              <h3 className="text-2xl font-extrabold sm:text-4xl">{t.ctaBanner.title}</h3>
+              <p className="mx-auto mt-3 max-w-xl text-zinc-400">{t.ctaBanner.sub}</p>
+              <div>
+                <Link
+                  to="/contact"
+                  className="mt-8 inline-flex h-12 items-center gap-2 rounded-full bg-[#F97316] px-8 font-semibold text-white shadow-[0_0_25px_rgba(249,115,22,0.35)] transition-transform hover:scale-105"
+                >
+                  {t.ctaBanner.btn} <ArrowRight className="size-4" />
+                </Link>
+              </div>
+            </SpotlightCard>
+          </Reveal>
         </div>
       </section>
     </>
@@ -733,60 +971,67 @@ function ServicesPage() {
   return (
     <section className="py-20">
       <div className="mx-auto max-w-6xl px-5">
-        <span className="text-xs font-bold uppercase tracking-[0.2em] text-[#F97316]">{t.packages.eyebrow}</span>
-        <h1 className="mt-3 text-4xl font-extrabold sm:text-5xl">{t.packages.title}</h1>
-        <p className="mt-4 max-w-2xl text-zinc-400">{t.packages.sub}</p>
+        <Reveal>
+          <span className="text-xs font-bold uppercase tracking-[0.2em] text-[#F97316]">{t.packages.eyebrow}</span>
+          <h1 className="mt-3 text-4xl font-extrabold sm:text-5xl">{t.packages.title}</h1>
+          <p className="mt-4 max-w-2xl text-zinc-400">{t.packages.sub}</p>
+        </Reveal>
 
         <div className="mt-12 grid gap-6 md:grid-cols-3">
-          {t.packages.tiers.map((tier) => (
-            <div
-              key={tier.id}
-              className={`relative flex flex-col rounded-2xl border bg-[#141417] p-8 ${
-                tier.popular ? "border-[#F97316] shadow-[0_0_35px_rgba(249,115,22,0.12)]" : "border-[#27272A]"
-              }`}
-            >
-              {tier.popular && (
-                <span className="absolute -top-3 left-1/2 -translate-x-1/2 rounded-full bg-[#F97316] px-3 py-1 text-xs font-bold text-white">
-                  {t.packages.popular}
-                </span>
-              )}
-              <h2 className="text-xl font-bold">{tier.name}</h2>
-              <div className="mt-4 flex items-baseline gap-2">
-                <span className="font-display text-5xl font-extrabold">{tier.price}</span>
-                <span className="text-xs text-zinc-400">· {tier.duration}</span>
+          {t.packages.tiers.map((tier, idx) => (
+            <Reveal key={tier.id} delay={idx * 100}>
+              <div className="relative h-full">
+                {tier.popular && (
+                  <span className="absolute -top-3 left-1/2 z-20 -translate-x-1/2 rounded-full bg-[#F97316] px-3 py-1 text-xs font-bold text-white shadow-[0_0_20px_rgba(249,115,22,0.5)]">
+                    {t.packages.popular}
+                  </span>
+                )}
+                <SpotlightCard highlighted={tier.popular} className="h-full p-8">
+                  <h2 className="text-xl font-bold">{tier.name}</h2>
+                  <div className="mt-4 flex items-baseline gap-2">
+                    <span className="font-display text-5xl font-extrabold">{tier.price}</span>
+                    <span className="text-xs text-zinc-400">· {tier.duration}</span>
+                  </div>
+                  <ul className="mt-8 flex-1 space-y-3 text-sm text-zinc-300">
+                    {tier.features.map((f) => (
+                      <li key={f} className="flex gap-3">
+                        <Check className="mt-0.5 size-4 shrink-0 text-[#F97316]" /> {f}
+                      </li>
+                    ))}
+                  </ul>
+                  <Link
+                    to={`/contact?pkg=${encodeURIComponent(`${tier.name} (${tier.price})`)}`}
+                    className={`mt-8 inline-flex h-12 items-center justify-center gap-2 rounded-full text-sm font-semibold transition-all ${
+                      tier.popular
+                        ? "bg-[#F97316] text-white shadow-[0_0_20px_rgba(249,115,22,0.3)] hover:brightness-110"
+                        : "border border-[#27272A] bg-[#09090B] text-white hover:border-[#F97316]/60"
+                    }`}
+                  >
+                    {t.packages.selectBtn} <ArrowRight className="size-4" />
+                  </Link>
+                </SpotlightCard>
               </div>
-              <ul className="mt-8 flex-1 space-y-3 text-sm text-zinc-300">
-                {tier.features.map((f) => (
-                  <li key={f} className="flex gap-3">
-                    <Check className="mt-0.5 size-4 shrink-0 text-[#F97316]" /> {f}
-                  </li>
-                ))}
-              </ul>
-              <Link
-                to={`/contact?pkg=${encodeURIComponent(`${tier.name} (${tier.price})`)}`}
-                className={`mt-8 inline-flex h-12 items-center justify-center gap-2 rounded-full text-sm font-semibold ${
-                  tier.popular ? "bg-[#F97316] text-white" : "border border-[#27272A] bg-[#09090B] text-white hover:border-zinc-600"
-                }`}
-              >
-                {t.packages.selectBtn} <ArrowRight className="size-4" />
-              </Link>
-            </div>
+            </Reveal>
           ))}
         </div>
 
-        <p className="mt-6 rounded-xl border border-[#27272A] bg-[#141417]/60 px-5 py-3.5 text-xs text-zinc-400">
-          * {t.packages.sizeNote}
-        </p>
+        <Reveal delay={100}>
+          <p className="mt-6 rounded-xl border border-[#27272A] bg-[#141417]/60 px-5 py-3.5 text-xs text-zinc-400">
+            * {t.packages.sizeNote}
+          </p>
+        </Reveal>
 
         <div className="mt-20 grid gap-6 md:grid-cols-3">
           {t.pillars.items.map((item, idx) => {
             const Icon = icons[idx]!;
             return (
-              <div key={item.t} className="rounded-2xl border border-[#27272A] bg-[#141417] p-8">
-                <Icon className="size-6 text-[#F97316]" />
-                <h3 className="mt-4 text-lg font-bold">{item.t}</h3>
-                <p className="mt-2 text-sm leading-relaxed text-zinc-400">{item.d}</p>
-              </div>
+              <Reveal key={item.t} delay={idx * 100}>
+                <SpotlightCard className="h-full p-8">
+                  <Icon className="size-6 text-[#F97316]" />
+                  <h3 className="mt-4 text-lg font-bold">{item.t}</h3>
+                  <p className="mt-2 text-sm leading-relaxed text-zinc-400">{item.d}</p>
+                </SpotlightCard>
+              </Reveal>
             );
           })}
         </div>
@@ -804,44 +1049,54 @@ function StudioPage() {
   return (
     <section className="py-20">
       <div className="mx-auto max-w-6xl px-5">
-        <span className="text-xs font-bold uppercase tracking-[0.2em] text-[#F97316]">{t.studio.eyebrow}</span>
-        <h1 className="mt-3 text-4xl font-extrabold sm:text-5xl">{t.studio.title}</h1>
-        <p className="mt-4 max-w-2xl text-zinc-400">{t.studio.sub}</p>
+        <Reveal>
+          <span className="text-xs font-bold uppercase tracking-[0.2em] text-[#F97316]">{t.studio.eyebrow}</span>
+          <h1 className="mt-3 text-4xl font-extrabold sm:text-5xl">{t.studio.title}</h1>
+          <p className="mt-4 max-w-2xl text-zinc-400">{t.studio.sub}</p>
+        </Reveal>
 
         <div className="mt-12 grid gap-6 md:grid-cols-3">
-          {t.studio.steps.map((s) => (
-            <div key={s.num} className="rounded-2xl border border-[#27272A] bg-[#141417] p-8">
-              <span className="font-display text-4xl font-extrabold text-[#F97316]">{s.num}.</span>
-              <h2 className="mt-5 text-xl font-bold">{s.t}</h2>
-              <p className="mt-3 text-sm leading-relaxed text-zinc-400">{s.d}</p>
-            </div>
+          {t.studio.steps.map((s, idx) => (
+            <Reveal key={s.num} delay={idx * 100}>
+              <SpotlightCard className="h-full p-8">
+                <span className="font-display text-4xl font-extrabold text-[#F97316]">{s.num}.</span>
+                <h2 className="mt-5 text-xl font-bold">{s.t}</h2>
+                <p className="mt-3 text-sm leading-relaxed text-zinc-400">{s.d}</p>
+              </SpotlightCard>
+            </Reveal>
           ))}
         </div>
 
-        <h2 className="mt-20 text-2xl font-extrabold sm:text-4xl">{t.studio.standardsTitle}</h2>
+        <Reveal>
+          <h2 className="mt-20 text-2xl font-extrabold sm:text-4xl">{t.studio.standardsTitle}</h2>
+        </Reveal>
         <div className="mt-8 grid gap-6 md:grid-cols-3">
           {t.studio.standards.map((st, idx) => {
             const Icon = stdIcons[idx]!;
             return (
-              <div key={st.t} className="rounded-2xl border border-[#27272A] bg-[#141417] p-8">
-                <div className="flex size-11 items-center justify-center rounded-xl bg-[#F97316]/10 text-[#F97316]">
-                  <Icon className="size-5" />
-                </div>
-                <h3 className="mt-5 text-lg font-bold">{st.t}</h3>
-                <p className="mt-2 text-sm leading-relaxed text-zinc-400">{st.d}</p>
-              </div>
+              <Reveal key={st.t} delay={idx * 100}>
+                <SpotlightCard className="h-full p-8">
+                  <div className="flex size-11 items-center justify-center rounded-xl bg-[#F97316]/10 text-[#F97316]">
+                    <Icon className="size-5" />
+                  </div>
+                  <h3 className="mt-5 text-lg font-bold">{st.t}</h3>
+                  <p className="mt-2 text-sm leading-relaxed text-zinc-400">{st.d}</p>
+                </SpotlightCard>
+              </Reveal>
             );
           })}
         </div>
 
-        <div className="mt-16 text-center">
-          <Link
-            to="/contact"
-            className="inline-flex h-12 items-center gap-2 rounded-full bg-[#F97316] px-8 font-semibold text-white"
-          >
-            {t.ctaBanner.btn} <ArrowRight className="size-4" />
-          </Link>
-        </div>
+        <Reveal delay={120}>
+          <div className="mt-16 text-center">
+            <Link
+              to="/contact"
+              className="inline-flex h-12 items-center gap-2 rounded-full bg-[#F97316] px-8 font-semibold text-white shadow-[0_0_25px_rgba(249,115,22,0.35)] transition-transform hover:scale-105"
+            >
+              {t.ctaBanner.btn} <ArrowRight className="size-4" />
+            </Link>
+          </div>
+        </Reveal>
       </div>
     </section>
   );
@@ -854,10 +1109,7 @@ function ContactPage() {
   const [searchParams] = useSearchParams();
   const navigate = useNavigate();
 
-  const pkgOptions = [
-    ...t.packages.tiers.map((tier) => `${tier.name} (${tier.price})`),
-    t.contact.customOpt,
-  ];
+  const pkgOptions = [...t.packages.tiers.map((tier) => `${tier.name} (${tier.price})`), t.contact.customOpt];
 
   const initialPkg = searchParams.get("pkg");
   const [selectedPkg, setSelectedPkg] = useState(initialPkg || pkgOptions[1]!);
@@ -909,93 +1161,101 @@ function ContactPage() {
   return (
     <section className="py-20">
       <div className="mx-auto max-w-6xl px-5">
-        <span className="text-xs font-bold uppercase tracking-[0.2em] text-[#F97316]">{t.contact.eyebrow}</span>
-        <h1 className="mt-3 text-4xl font-extrabold sm:text-5xl">{t.contact.title}</h1>
-        <p className="mt-4 max-w-2xl text-zinc-400">{t.contact.sub}</p>
+        <Reveal>
+          <span className="text-xs font-bold uppercase tracking-[0.2em] text-[#F97316]">{t.contact.eyebrow}</span>
+          <h1 className="mt-3 text-4xl font-extrabold sm:text-5xl">{t.contact.title}</h1>
+          <p className="mt-4 max-w-2xl text-zinc-400">{t.contact.sub}</p>
+        </Reveal>
 
         <div className="mt-12 grid gap-8 lg:grid-cols-5">
-          <div className="space-y-6 rounded-2xl border border-[#27272A] bg-[#141417] p-8 lg:col-span-2">
-            <div>
-              <div className="flex items-center gap-2 text-sm font-bold text-[#F97316]">
-                <MapPin className="size-4" /> {t.contact.viennaTitle}
+          <Reveal className="lg:col-span-2">
+            <SpotlightCard className="h-full space-y-6 p-8">
+              <div>
+                <div className="flex items-center gap-2 text-sm font-bold text-[#F97316]">
+                  <MapPin className="size-4" /> {t.contact.viennaTitle}
+                </div>
+                <p className="mt-1 text-sm text-zinc-300">{t.contact.viennaAddr}</p>
               </div>
-              <p className="mt-1 text-sm text-zinc-300">{t.contact.viennaAddr}</p>
-            </div>
-            <div className="border-t border-[#27272A] pt-5">
-              <div className="flex items-center gap-2 text-sm font-bold text-[#F97316]">
-                <MapPin className="size-4" /> {t.contact.munichTitle}
+              <div className="border-t border-[#27272A] pt-5">
+                <div className="flex items-center gap-2 text-sm font-bold text-[#F97316]">
+                  <MapPin className="size-4" /> {t.contact.munichTitle}
+                </div>
+                <p className="mt-1 text-sm text-zinc-300">{t.contact.munichAddr}</p>
               </div>
-              <p className="mt-1 text-sm text-zinc-300">{t.contact.munichAddr}</p>
-            </div>
-            <div className="border-t border-[#27272A] pt-5">
-              <div className="flex items-center gap-2 text-sm font-bold text-white">
-                <Clock className="size-4 text-[#F97316]" /> {t.contact.hoursLabel}
+              <div className="border-t border-[#27272A] pt-5">
+                <div className="flex items-center gap-2 text-sm font-bold text-white">
+                  <Clock className="size-4 text-[#F97316]" /> {t.contact.hoursLabel}
+                </div>
+                <p className="mt-1 text-sm text-zinc-400">{t.contact.hours}</p>
               </div>
-              <p className="mt-1 text-sm text-zinc-400">{t.contact.hours}</p>
-            </div>
-            <div className="border-t border-[#27272A] pt-5">
-              <div className="flex items-center gap-2 text-sm font-bold text-white">
-                <Mail className="size-4 text-[#F97316]" /> Email
+              <div className="border-t border-[#27272A] pt-5">
+                <div className="flex items-center gap-2 text-sm font-bold text-white">
+                  <Mail className="size-4 text-[#F97316]" /> Email
+                </div>
+                <p className="mt-1 text-sm text-zinc-400">studio@apexdetailing-demo.at</p>
               </div>
-              <p className="mt-1 text-sm text-zinc-400">studio@apexdetailing-demo.at</p>
-            </div>
-          </div>
+            </SpotlightCard>
+          </Reveal>
 
-          <form onSubmit={handleSubmit} noValidate className="grid gap-5 rounded-2xl border border-[#27272A] bg-[#141417] p-8 sm:grid-cols-2 lg:col-span-3">
-            <h2 className="text-xl font-bold sm:col-span-2">{t.contact.formTitle}</h2>
+          <Reveal delay={100} className="lg:col-span-3">
+            <SpotlightCard className="p-8">
+              <form onSubmit={handleSubmit} noValidate className="grid gap-5 sm:grid-cols-2">
+                <h2 className="text-xl font-bold sm:col-span-2">{t.contact.formTitle}</h2>
 
-            <label className="flex flex-col gap-2 text-sm font-medium">
-              {t.contact.name}
-              <input name="name" placeholder={t.contact.namePh} className={inputCls} />
-              {errors.name && <span className="text-xs text-red-400">{errors.name}</span>}
-            </label>
+                <label className="flex flex-col gap-2 text-sm font-medium">
+                  {t.contact.name}
+                  <input name="name" placeholder={t.contact.namePh} className={inputCls} />
+                  {errors.name && <span className="text-xs text-red-400">{errors.name}</span>}
+                </label>
 
-            <label className="flex flex-col gap-2 text-sm font-medium">
-              {t.contact.email}
-              <input name="email" type="email" placeholder={t.contact.emailPh} className={inputCls} />
-              {errors.email && <span className="text-xs text-red-400">{errors.email}</span>}
-            </label>
+                <label className="flex flex-col gap-2 text-sm font-medium">
+                  {t.contact.email}
+                  <input name="email" type="email" placeholder={t.contact.emailPh} className={inputCls} />
+                  {errors.email && <span className="text-xs text-red-400">{errors.email}</span>}
+                </label>
 
-            <label className="flex flex-col gap-2 text-sm font-medium sm:col-span-2">
-              {t.contact.car}
-              <input name="vehicle" placeholder={t.contact.carPh} className={inputCls} />
-            </label>
+                <label className="flex flex-col gap-2 text-sm font-medium sm:col-span-2">
+                  {t.contact.car}
+                  <input name="vehicle" placeholder={t.contact.carPh} className={inputCls} />
+                </label>
 
-            <label className="flex flex-col gap-2 text-sm font-medium sm:col-span-2">
-              {t.contact.pkg}
-              <select name="package" value={selectedPkg} onChange={(e) => setSelectedPkg(e.target.value)} className={inputCls}>
-                {pkgOptions.map((opt) => (
-                  <option key={opt} value={opt}>
-                    {opt}
-                  </option>
-                ))}
-              </select>
-            </label>
+                <label className="flex flex-col gap-2 text-sm font-medium sm:col-span-2">
+                  {t.contact.pkg}
+                  <select name="package" value={selectedPkg} onChange={(e) => setSelectedPkg(e.target.value)} className={inputCls}>
+                    {pkgOptions.map((opt) => (
+                      <option key={opt} value={opt}>
+                        {opt}
+                      </option>
+                    ))}
+                  </select>
+                </label>
 
-            <label className="flex flex-col gap-2 text-sm font-medium sm:col-span-2">
-              {t.contact.notes}
-              <textarea name="message" rows={4} placeholder={t.contact.notesPh} className={inputCls} />
-            </label>
+                <label className="flex flex-col gap-2 text-sm font-medium sm:col-span-2">
+                  {t.contact.notes}
+                  <textarea name="message" rows={4} placeholder={t.contact.notesPh} className={inputCls} />
+                </label>
 
-            {status === "ok" && (
-              <div className="flex items-center gap-2 rounded-xl border border-emerald-500/30 bg-emerald-500/10 p-4 text-sm text-emerald-300 sm:col-span-2">
-                <CheckCircle2 className="size-5 shrink-0" /> {t.contact.success}
-              </div>
-            )}
-            {status === "err" && (
-              <div className="rounded-xl border border-red-500/30 bg-red-500/10 p-4 text-sm text-red-300 sm:col-span-2">
-                {t.contact.error}
-              </div>
-            )}
+                {status === "ok" && (
+                  <div className="flex items-center gap-2 rounded-xl border border-emerald-500/30 bg-emerald-500/10 p-4 text-sm text-emerald-300 sm:col-span-2">
+                    <CheckCircle2 className="size-5 shrink-0" /> {t.contact.success}
+                  </div>
+                )}
+                {status === "err" && (
+                  <div className="rounded-xl border border-red-500/30 bg-red-500/10 p-4 text-sm text-red-300 sm:col-span-2">
+                    {t.contact.error}
+                  </div>
+                )}
 
-            <button
-              type="submit"
-              disabled={sending}
-              className="inline-flex h-12 items-center justify-center gap-2 rounded-full bg-[#F97316] font-semibold text-white transition-opacity disabled:opacity-60 sm:col-span-2"
-            >
-              {sending ? t.contact.sending : t.contact.submit} <ArrowRight className="size-4" />
-            </button>
-          </form>
+                <button
+                  type="submit"
+                  disabled={sending}
+                  className="inline-flex h-12 items-center justify-center gap-2 rounded-full bg-[#F97316] font-semibold text-white shadow-[0_0_25px_rgba(249,115,22,0.3)] transition-all hover:brightness-110 disabled:opacity-60 sm:col-span-2"
+                >
+                  {sending ? t.contact.sending : t.contact.submit} <ArrowRight className="size-4" />
+                </button>
+              </form>
+            </SpotlightCard>
+          </Reveal>
         </div>
       </div>
     </section>
